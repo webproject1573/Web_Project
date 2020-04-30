@@ -16,11 +16,11 @@ while True:
         if messages["count"] >= 1:
             id = messages["items"][0]["last_message"]["from_id"]
             body = messages["items"][0]["last_message"]["text"]
-            if 'прив' in body.lower():
-                vk.method("messages.send", {"peer_id": id, "message": "Привет! Напиши слово ПОДСКАЗКА, если хочешь узнать, что я могу", "random_id": random.randint(1, 2147483647)})
-            elif body.lower() == "подсказка":
-                vk.method("messages.send", {"peer_id": id, "message": "пока что я ничего не могу, кроме этого", "random_id": random.randint(1, 2147483647)})
+            if 'РїСЂРёРІРµС‚' in body.lower():
+                vk.method("messages.send", {"peer_id": id, "message": "РїСЂРёРІРµС‚", "random_id": random.randint(1, 2147483647)})
+            elif body.lower() == "РєР°Рє РґРµР»Р°":
+                vk.method("messages.send", {"peer_id": id, "message": "РЅРѕСЂРјР°Р»СЊРЅРѕ", "random_id": random.randint(1, 2147483647)})
             else:
-                vk.method("messages.send", {"peer_id": id, "message": "Не понял тебя!", "random_id": random.randint(1, 2147483647)})
+                vk.method("messages.send", {"peer_id": id, "message": "СЏ С‚РµР±СЏ РЅРµ РїРѕРЅРёРјР°СЋ", "random_id": random.randint(1, 2147483647)})
     except Exception as E:
         time.sleep(1)
