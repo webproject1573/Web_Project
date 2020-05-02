@@ -2,7 +2,7 @@ import discord
 from discord import utils
 
 
-TOKEN = "NzA1MzE3ODkxNTc4Mzk2NzMz.Xq2DOg._fQ_pJYXp06xIUWysj8x_JwR08Y"
+TOKEN = "XXXXXXXXXXXXXXXXXX"
 # bot token
 
 POST_ID = 705128184533876767 # post id to read reactions from
