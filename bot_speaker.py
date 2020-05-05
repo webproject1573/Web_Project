@@ -1,21 +1,49 @@
 import discord
 import datetime
 from discord.ext import commands
+from discord.utils import get
+import youtube_dl
+import os
 
 client = commands.Bot(command_prefix='.')
 client.remove_command('help')
+bad_words = ['fuck', 'bitch', 'in your mother', 'fuck you']
 
-TOKEN = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+TOKEN = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 
 
 @client.event
 async def on_ready():
     print('BOT is ready!')
 
+    await client.change_presence(status=discord.Status.online, activity=discord.Game('.help'))
+
+
+@client.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.CommandNotFound):
+        await ctx.send(f'{ctx.author.name}, there is no such command on the server!')
+
+
+@client.event
+async def on_message(message):
+    await client.process_commands(message)
+    msg = message.content.lower()
+    if msg in bad_words:
+        await message.delete()
+        await message.author.send(f'{message.author.name}, not to express!')
+
+
+@client.event
+async def on_member_join(member):
+    role = discord.utils.get(member.guild.roles, id=707261130392862810)
+
+    await member.add_roles(role)
+
 
 @client.command(pass_context=True)
 @commands.has_permissions(administrator=True)
-async def clear(ctx, amount=100):
+async def clear(ctx, amount:int):
     await ctx.channel.purge(limit=amount)
 
 
@@ -23,7 +51,7 @@ async def clear(ctx, amount=100):
 async def hello(ctx, amount=1):
     await ctx.channel.purge(limit=amount)
     author = ctx.message.author
-    await ctx.send('Hello {}'.format(author.mention))
+    await ctx.author.send('Hello {}'.format(author.mention))
 
 
 @client.command(pass_context=True)
@@ -75,8 +103,9 @@ async def help(ctx):
     emb.add_field(name='.ban', value='Restricting access to the server')
     emb.add_field(name='.unban', value='The removal of restrictions to the server')
     emb.add_field(name='.time', value='Time and date')
-
-    await ctx.send(author, embed=emb)
+    emb.add_field(name='.mute', value='Mute user')
+    emb.add_field(name='.send_msg', value='Send greetings')
+    await ctx.author.send(author, embed=emb)
 
 
 @client.command(pass_context=True)
@@ -90,6 +119,127 @@ async def time(ctx):
 
     emb.add_field(name="Time and date:", value='{}'.format(datetime.datetime.now()))
 
-    await ctx.send(embed=emb)
+    await ctx.author.send(embed=emb)
+
+
+@client.command()
+@commands.has_permissions(administrator=True)
+async def mute(ctx, member: discord.Member):
+    await ctx.channel.purge(limit=1)
+    mute_role = discord.utils.get(ctx.message.guild.roles, name='MUTE')
+    
+    await member.add_roles(mute_role)
+    await ctx.send('From {}, the restriction of chat, for violations of the rights of the user!'.format(member.mention))
+
+
+@client.command()
+async def send_msg(ctx, member: discord.Member):
+    await member.send(f'{member.name}, greetings from {ctx.author.name}')
+
+
+@client.command()
+async def join(ctx):
+    global voice
+    channel = ctx.message.author.voice.channel
+    voice = get(client.voice_clients, guild=ctx.guild)
+
+    if voice and voice.is_connected():
+        await voice.move_to(channel)
+    else:
+        voice = await channel.connect()
+        await ctx.send(f'The bot joined the channel: {channel}')
+
+
+@client.command()
+async def leave(ctx):
+    channel = ctx.message.author.voice.channel
+    voice = get(client.voice_clients, guild=ctx.guild)
+
+    if voice and voice.is_connected():
+        await voice.disconnect()
+    else:
+        voice = await channel.connect()
+        await ctx.send(f'The bot leave the channel: {channel}')
+
+
+@client.command()
+async def play(ctx, url: str):
+    song_there = os.path.isfile('song.mp3')
+    try:
+        if song_there:
+            os.remove('song.mp3')
+            print('[log] Старый файл удалён')
+    except PermissionError:
+        print('[log] Не удалось удалить файл')
+        
+    await ctx.send('Пожалуйста ожидайте')
+    
+    voice = get(client.voice_clients, guild=ctx.guild)
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192'
+        }],
+    }
+
+    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        print('[log] Загружаю музыку...')
+        ydl.download([url])
+
+    for file in os.listdir('./'):
+        if file.endswith('.mp3'):
+            name = file
+            print('[log] Переименовую файл {}'.format(file))
+            os.rename(file, 'song.mp3')
+
+    voice.play((discord.FFmpegPCMAudio('song.mp3')), after=lambda e: print('[log] {}, музыка закончила своё проигрывание'.format(name)))
+    voice.source = discord.PCMVolumeTransformer(voice.source)
+    voice.source.volume = 0.07
+
+    song_name = name.rsplit('-', 2)
+    await ctx.send('Сейчас проигрывается музыка: {}'.format(song_name[0]))
+
+
+@clear.error
+async def clear_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send(f'{ctx.author.name}, you must specify the arguments!')
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send(f'{ctx.author.name}, you don`t have enough rights!')
+
+
+@kick.error
+async def kick_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send(f'{ctx.author.name}, you must specify the user!')
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send(f'{ctx.author.name}, you don`t have enough rights!')
+
+
+@ban.error
+async def ban_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send(f'{ctx.author.name}, you must specify the user!')
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send(f'{ctx.author.name}, you don`t have enough rights!')
+
+
+@unban.error
+async def unban_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send(f'{ctx.author.name}, you must specify the user!')
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send(f'{ctx.author.name}, you don`t have enough rights!')
+
+
+@mute.error
+async def mute_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send(f'{ctx.author.name}, you must specify the user!')
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send(f'{ctx.author.name}, you don`t have enough rights!')
+
 
 client.run(TOKEN)
