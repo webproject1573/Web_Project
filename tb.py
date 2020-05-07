@@ -80,23 +80,23 @@ def get_text_messages(message):
 
         bot.send_message(message.from_user.id, "Привет, выбери один из жанров игр для psp(rpg, adventure, arcada), а я тебе выберу 1")
 
-    elif message.text == "rpg":
-    	f = random.choice(spis_rpg)
-    	for key, val in rpg.items():
-    		if f == key:
-    			bot.send_message(message.from_user.id, "Нашел классную игрушку! - {}, а скачать ее для psp можно вот тут - {}".format(key, val))
+    elif 'rpg' in message.text.lower():
+        f = random.choice(spis_rpg)
+        for key, val in rpg.items():
+    		    if f in key:
+    			      bot.send_message(message.from_user.id, "Нашел классную игрушку! - {} А скачать эту игру для psp можно вот тут - {}".format(key, val))
 
-    elif message.text == 'adventure':
-    	g = random.choice(spis_adv)
-    	for key, val in adv.items():
-    		if g == key:
-    			bot.send_message(message.from_user.id, "Нашел классную игрушку! - {}, а скачать ее для psp можно вот тут - {}".format(key, val))
+    elif 'adventure' in message.text.lower():
+    	  g = random.choice(spis_adv)
+    	  for key, val in adv.items():
+    		    if g in key:
+    			      bot.send_message(message.from_user.id, "Нашел классную игрушку! - {} А скачать эту игру для psp можно вот тут - {}".format(key, val))
 
-    elif message.text == 'arcada':
-    	h = random.choice(spis_arc)
-    	for key, val in arc.items():
-    		if h == key:
-    			bot.send_message(message.from_user.id, "Нашел классную игрушку! - {}, а скачать ее для psp можно вот тут - {}".format(key, val))
+    elif 'arcada' in message.text.lower():
+    	  h = random.choice(spis_arc)
+    	  for key, val in arc.items():
+    		    if h in key:
+    			    bot.send_message(message.from_user.id, "Нашел классную игрушку! - {} A скачать эту игру для psp можно вот тут - {}".format(key, val))
 
 
     else:
