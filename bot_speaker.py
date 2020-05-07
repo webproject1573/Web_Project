@@ -8,13 +8,14 @@ import os
 client = commands.Bot(command_prefix='.')
 client.remove_command('help')
 bad_words = ['fuck', 'bitch', 'in your mother', 'fuck you']
+# данный массив был написан с целью не оскорбить кого-либо, а избавить сервер от плохих слов
 
-TOKEN = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+TOKEN = 'XXXXXXXXXXXXXXXXXXXXXXXXXXx'
 
 
 @client.event
 async def on_ready():
-    print('BOT is ready!')
+    print("Logged in as: " + client.user.name + "\n")
 
     await client.change_presence(status=discord.Status.online, activity=discord.Game('.help'))
 
@@ -137,9 +138,9 @@ async def send_msg(ctx, member: discord.Member):
     await member.send(f'{member.name}, greetings from {ctx.author.name}')
 
 
-@client.command()
+@client.command(pass_context=True, aliases=['j', 'joi'])
 async def join(ctx):
-    global voice
+    print(1)
     channel = ctx.message.author.voice.channel
     voice = get(client.voice_clients, guild=ctx.guild)
 
@@ -147,19 +148,32 @@ async def join(ctx):
         await voice.move_to(channel)
     else:
         voice = await channel.connect()
-        await ctx.send(f'The bot joined the channel: {channel}')
+
+    await voice.disconnect()
+
+    if voice and voice.is_connected():
+        print('connect')
+        await voice.move_to(channel)
+    else:
+        print('connect_')
+        voice = await channel.connect()
+        print(f"The bot has connected to {channel}\n")
+
+    await ctx.send(f"Joined {channel}")
 
 
-@client.command()
+@client.command(pass_context=True, aliases=['l', 'lea'])
 async def leave(ctx):
     channel = ctx.message.author.voice.channel
     voice = get(client.voice_clients, guild=ctx.guild)
 
     if voice and voice.is_connected():
         await voice.disconnect()
+        print(f"The bot has left {channel}")
+        await ctx.send(f"Left {channel}")
     else:
-        voice = await channel.connect()
-        await ctx.send(f'The bot leave the channel: {channel}')
+        print("Bot was told to leave voice channel, but was not in one")
+        await ctx.send("Don't think I am in a voice channel")
 
 
 @client.command()
@@ -172,9 +186,7 @@ async def play(ctx, url: str):
     except PermissionError:
         print('[log] Не удалось удалить файл')
         
-    await ctx.send('Пожалуйста ожидайте')
-    
-    voice = get(client.voice_clients, guild=ctx.guild)
+    await ctx.send('Please wait')
     ydl_opts = {
         'format': 'bestaudio/best',
         'postprocessors': [{
@@ -190,16 +202,8 @@ async def play(ctx, url: str):
 
     for file in os.listdir('./'):
         if file.endswith('.mp3'):
-            name = file
-            print('[log] Переименовую файл {}'.format(file))
-            os.rename(file, 'song.mp3')
-
-    voice.play((discord.FFmpegPCMAudio('song.mp3')), after=lambda e: print('[log] {}, музыка закончила своё проигрывание'.format(name)))
-    voice.source = discord.PCMVolumeTransformer(voice.source)
-    voice.source.volume = 0.07
-
-    song_name = name.rsplit('-', 2)
-    await ctx.send('Сейчас проигрывается музыка: {}'.format(song_name[0]))
+            print('[log] Высылаю файл файл {}'.format(file))
+            await ctx.send_file(ctx.message.channel, open(file))
 
 
 @clear.error
