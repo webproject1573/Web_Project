@@ -2,7 +2,7 @@ import discord
 from discord import utils
 
 
-TOKEN = "NzA1MzE3ODkxNTc4Mzk2NzMz.XrA68w.-NJ7DQGiXyS3xby4kTiC38zK7bA"
+TOKEN = "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 # bot token
 
 POST_ID = 705128184533876767 
