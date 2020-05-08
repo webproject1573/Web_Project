@@ -11,7 +11,7 @@ bad_words = ['fuck', 'bitch', 'in your mother', 'fuck you']
 # данный массив был написан с целью не 
 # оскорбить кого-либо, а избавить сервер от плохих слов
 
-TOKEN = 'NzA2ODgyMDc0OTM3Nzg2NDA4.XrAukw.BzGFlu2wFklfZDELDmAseBzOP10'
+TOKEN = 'XXXXXXXXXXXXXXXXXXXXXXXXXXx'
 
 
 # указываем ТОКЕН для точто чтобы подключится к серверу
