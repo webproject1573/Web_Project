@@ -10,7 +10,7 @@ client.remove_command('help')
 bad_words = ['fuck', 'bitch', 'in your mother', 'fuck you']
 # данный массив был написан с целью не оскорбить кого-либо, а избавить сервер от плохих слов
 
-TOKEN = 'XXXXXXXXXXXXXXXXXXXXXXXXXXx'
+TOKEN = 'XXXXXXXXXXXXXXXXXXXXXXXXXX'
 
 
 @client.event
@@ -106,6 +106,7 @@ async def help(ctx):
     emb.add_field(name='.time', value='Time and date')
     emb.add_field(name='.mute', value='Mute user')
     emb.add_field(name='.send_msg', value='Send greetings')
+    emb.add_field(name='.music', value='Send music file from YouTube')
     await ctx.author.send(author, embed=emb)
 
 
@@ -138,46 +139,8 @@ async def send_msg(ctx, member: discord.Member):
     await member.send(f'{member.name}, greetings from {ctx.author.name}')
 
 
-@client.command(pass_context=True, aliases=['j', 'joi'])
-async def join(ctx):
-    print(1)
-    channel = ctx.message.author.voice.channel
-    voice = get(client.voice_clients, guild=ctx.guild)
-
-    if voice and voice.is_connected():
-        await voice.move_to(channel)
-    else:
-        voice = await channel.connect()
-
-    await voice.disconnect()
-
-    if voice and voice.is_connected():
-        print('connect')
-        await voice.move_to(channel)
-    else:
-        print('connect_')
-        voice = await channel.connect()
-        print(f"The bot has connected to {channel}\n")
-
-    await ctx.send(f"Joined {channel}")
-
-
-@client.command(pass_context=True, aliases=['l', 'lea'])
-async def leave(ctx):
-    channel = ctx.message.author.voice.channel
-    voice = get(client.voice_clients, guild=ctx.guild)
-
-    if voice and voice.is_connected():
-        await voice.disconnect()
-        print(f"The bot has left {channel}")
-        await ctx.send(f"Left {channel}")
-    else:
-        print("Bot was told to leave voice channel, but was not in one")
-        await ctx.send("Don't think I am in a voice channel")
-
-
 @client.command()
-async def play(ctx, url: str):
+async def music(ctx, url: str):
     song_there = os.path.isfile('song.mp3')
     try:
         if song_there:
@@ -202,8 +165,16 @@ async def play(ctx, url: str):
 
     for file in os.listdir('./'):
         if file.endswith('.mp3'):
-            print('[log] Высылаю файл файл {}'.format(file))
-            await ctx.send_file(ctx.message.channel, open(file))
+            name = file
+            print('[log] Высылаю файл {}'.format(file))
+            os.rename(file, 'song.mp3')
+    await ctx.send(file=discord.File(open('song.mp3', "rb"), name))
+
+
+@music.error
+async def music_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send(f'{ctx.author.name}, you must specify the arguments!')
 
 
 @clear.error
