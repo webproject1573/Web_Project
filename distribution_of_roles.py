@@ -2,19 +2,19 @@ import discord
 from discord import utils
 
 
-TOKEN = "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+TOKEN = input('Ведите токен:')
 # bot token
 
-POST_ID = 705128184533876767 
+POST_ID = int(input('Ведите свой POST_ID:')) 
 # post id to read reactions from
 
 # roles list according to emotes
 ROLES = {
-    "🎮": 705121160723038278,
+    "🎮": int(input('Введите ID для игровой роли:')),
     # gamer role
-    "🎧": 705121168461660220,
+    "🎧": int(input('Введите ID для IT роли:')),
     # it
-    "🎓": 705121496451776640,
+    "🎓": int(input('Введите ID для учённой роли:')),
     # scienctist user
 }
 
