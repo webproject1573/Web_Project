@@ -2,7 +2,7 @@ import telebot
 import random
 
 print('введите токен:')
-tok = "1253588512:AAEfDNBJC0a0ToG8P2DfzDk_gp3U94zXvxU"
+tok = input()
 bot = telebot.TeleBot(tok)
 
     # сначала мы создадим словарь, где ключ - это название и описание, а ссылка - значение ключа 
