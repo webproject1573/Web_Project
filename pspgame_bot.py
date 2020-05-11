@@ -69,7 +69,10 @@ adv = {'Grand Theft Auto: Истории Вайс-Сити - Симулятор 
   ' на пути отважного Соника. Но ничто не в силах остановить самого быстрого ежа, тем более когда речь идет о \n'
   'спасении друзей!': 'https://yadi.sk/d/461md9k1bxwjV'}
 spis_adv = ['Grand Theft Auto', 'TEKKEN 6', 'God of War', 'Dante’s Inferno', 'Silent Hill', 'Sonic Rivals 2']
-token = 'a938c4126562ab4333e9cee5c4237ddbf1fff2d6994ebeccb4bc591672cb696d854099ed9ea26b3aa328f'
+
+print('Введите токен:')
+tok = input()
+token = tok
  
 vk = vk_api.VkApi(token=token)
  
@@ -82,7 +85,7 @@ while True:
             id = messages["items"][0]["last_message"]["from_id"]
             body = messages["items"][0]["last_message"]["text"]
             if 'привет' in body.lower():
-                vk.method("messages.send", {"peer_id": id, "message": "Привет! Я настоящий специалист по играм для psp! какую игру ты хочешь скачать?", "random_id": 0})
+                vk.method("messages.send", {"peer_id": id, "message": "Привет! Я настоящий специалист по играм для psp! какую игру ты хочешь скачать(рпг, приключения, аркада)?", "random_id": 0})
             elif body.lower() == "как дела":
                 vk.method("messages.send", {"peer_id": id, "message": "нормально", "random_id": 0})
             elif "rpg" in body.lower() or 'рпг' in body.lower():
