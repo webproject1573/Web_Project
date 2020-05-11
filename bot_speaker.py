@@ -11,8 +11,8 @@ bad_words = ['fuck', 'bitch', 'in your mother', 'fuck you']
 # данный массив был написан с целью не 
 # оскорбить кого-либо, а избавить сервер от плохих слов
 
-TOKEN = 'XXXXXXXXXXXXXXXXXXXXXXXXXXx'
-
+TOKEN = input('Ведите токен:')
+main_role = input('Ведите ID для оснвной роли:')
 
 # указываем ТОКЕН для точто чтобы подключится к серверу
 
@@ -54,7 +54,7 @@ async def on_message(message):
 
 @client.event
 async def on_member_join(member):
-    role = discord.utils.get(member.guild.roles, id=707261130392862810)
+    role = discord.utils.get(member.guild.roles, id=main_role)
 
     await member.add_roles(role)
 
