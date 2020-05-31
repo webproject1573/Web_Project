@@ -2,6 +2,7 @@
 import telebot
 import random
 import requests
+from langdetect import detect
 
 
 bot = telebot.TeleBot('1123646527:AAGfUxduzp-kFliZbKGH1syRo45Yu6jtZjs')
@@ -18,22 +19,25 @@ def get_translation(text, lang):
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
-
-    if 'é' in message.text or 'ö' in message.text or 'ó' in message.text or 'ê' in message.text or 'å' in message.text or 'í' in message.text or 'ã' in message.text or 'ø' in message.text or 'ù' in message.text or 'ç' in message.text or 'ô' in message.text or 'û' in message.text or 'â' in message.text or 'à' in message.text or 'ï' in message.text or 'ð' in message.text or 'î' in message.text or 'ë' in message.text or 'ä' in message.text or 'æ' in message.text or 'ý' in message.text or 'ÿ' in message.text or '÷' in message.text or 'ñ' in message.text or 'ì' in message.text or 'è' in message.text or 'ò' in message.text or 'ü' in message.text or 'á' in message.text or 'þ':
+    
+    lan = detect(message.text)
+    if 'û' in message.text or 'ó' in message.text or 'ê' in message.text or 'å' in message.text or 'í' in message.text or 'ã' in message.text or 'ÿ' in message.text or 'â' in message.text or 'à' in message.text or 'ð' in message.text or 'è' in message.text or 'î' in message.text or 'þ' in message.text or lan == 'mk' or lan == 'ru':
         URL = 'https://translate.yandex.net/api/v1.5/tr.json/translate?' 
         KEY = 'trnsl.1.1.20190227T075339Z.1b02a9ab6d4a47cc.f37d50831b51374ee600fd6aa0259419fd7ecd97' 
         TEXT = message.text
         LANG = 'en'
-        r = requests.post('https://translate.yandex.net/api/v1.5/tr.json/translate?', data={'key': 'trnsl.1.1.20190227T075339Z.1b02a9ab6d4a47cc.f37d50831b51374ee600fd6aa0259419fd7ecd97', 'text': TEXT, 'lang': 'en'})        
+        r = requests.post('https://translate.yandex.net/api/v1.5/tr.json/translate?', data={'key': 'trnsl.1.1.20190227T075339Z.1b02a9ab6d4a47cc.f37d50831b51374ee600fd6aa0259419fd7ecd97', 'text': message.text, 'lang': 'en'})        
         bot.send_message(message.from_user.id, eval(r.text)['text'])
     
     if 'q' in message.text or 'w' in message.text or 'e' in message.text or 'r' in message.text or 't' in message.text or 'y' in message.text or 'u' in message.text or 'i' in message.text or 'o' in message.text or 'p' in message.text or 'a' in message.text or 's' in message.text or 'd' in message.text or 'f' in message.text or 'g' in message.text or 'h' in message.text or 'j' in message.text or 'k' in message.text or 'l' in message.text or 'z' in message.text or 'x' in message.text or 'c' in message.text or 'v' in message.text or 'b' in message.text or 'n' in message.text or 'm' in message.text:
         URL = 'https://translate.yandex.net/api/v1.5/tr.json/translate?' 
+        URL = 'https://translate.yandex.net/api/v1.5/tr.json/translate?'
+        URL = 'https://translate.yandex.net/api/v1.5/tr.json/translate?' 
         KEY = 'trnsl.1.1.20190227T075339Z.1b02a9ab6d4a47cc.f37d50831b51374ee600fd6aa0259419fd7ecd97' 
         TEXT = message.text
-        r = requests.post('https://translate.yandex.net/api/v1.5/tr.json/translate?', data={'key': 'trnsl.1.1.20190227T075339Z.1b02a9ab6d4a47cc.f37d50831b51374ee600fd6aa0259419fd7ecd97', 'text': TEXT, 'lang': 'ru'})        
-        bot.send_message(message.from_user.id, eval(r.text)['text'])        
-
+        ri = requests.post('https://translate.yandex.net/api/v1.5/tr.json/translate?', data={'key': 'trnsl.1.1.20190227T075339Z.1b02a9ab6d4a47cc.f37d50831b51374ee600fd6aa0259419fd7ecd97', 'text': message.text, 'lang': 'ru'})        
+        bot.send_message(message.from_user.id, eval(ri.text)['text'])
+    
     
 
 bot.polling(none_stop=True, interval=0)
