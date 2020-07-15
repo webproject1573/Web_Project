@@ -3,6 +3,7 @@ from pytube import YouTube
 import sys
 import random
 from telebot import types
+import sqlite3
 
 print('Введите токен:')
 tok = '1253588512:AAEfDNBJC0a0ToG8P2DfzDk_gp3U94zXvxU'
@@ -18,9 +19,32 @@ discord_bots = {'Бот сообщества. Бот имеет большое �
 
 insta_bots = {}
 
+def check(text_mes):
+	con = sqlite3.connect('base.db')
+	cur = con.cursor()
+	try:
+		result = cur.execute(
+			"""SELECT id FROM users
+			WHERE email = ?""", (text_mes,)).fetchall()
+		if result == []:
+			return False
+		else:
+			return True
+	except:
+		return False
+
+ 
+
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
+
+    bot.send_message(message.from_user.id, 'Привет, я бот для сайта botworld.ru. Я помогу тебе скачать любого бота для разных соц. сетей. Напиши мне одно из названий: telegram, vk, instagram, discord. Ты должен быть зарегистрирован на нашем сайте botworld.ru, если ты не зарегистрирован, сделай это, займен меньше минуты! Напиши мне свою почту, чтобы я убедился, что ты уже зарегестрирован!')
+    if '@' in message.text.lower():
+    	if check(message.text.lower()) == True:
+    		bot.send_message(message.from_user.id, 'Добро пожаловать')
+    	else:
+    		bot.send_message(message.from_user.id, 'пшел вон')
 
     if 'привет' in message.text.lower():
         bot.send_message(message.from_user.id, "Привет, я бот для сайта botworld.ru. Я помогу тебе скачать любого бота для разных соц. сетей. Напиши мне одно из названий: telegram, vk, instagram, discord")
