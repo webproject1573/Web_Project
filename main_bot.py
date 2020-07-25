@@ -5,15 +5,16 @@ from telebot import types
 import sqlite3
 
 print('Введите токен:')
-tok = '1253588512:AAEfDNBJC0a0ToG8P2DfzDk_gp3U94zXvxU'
+tok = '1138291378:AAFCUM3jniDEyta3_ZeIqlLCGsvhdI9T-bs'
 bot = telebot.TeleBot(tok)
 
-telegram_bots = {'Игровой-парсер бот. Этот бот парсит информацию с разных источников, например c kanobu (напиши индекс бота #3340)': 'https://yadi.sk/d/-5gIoeh2vsuJ4w?qq=1',
+telegram_bots = {'Игровой-парсер бот. Этот бот парсит информацию с разных источников, например c kanobu (напиши индекс бота #3340)': 'Первая ссылка для скачивания exe(рекомендуемое), вторая ссылка для скачивания python-файла  https://yadi.sk/d/-5gIoeh2vsuJ4w?qq=1 , https://yadi.sk/d/HuvHhtjsIkE_xg',
 'PSP - бот. Бот дает информацию об играх на PSP.(напиши индекс бота - #3341)': 'https://yadi.sk/d/4dttKWB8Q28TKw?qq=1', 'Новостной-парсер бот. Бот может парсить информацию о новостях. (напиши индекс бота #3342)': 'https://yadi.sk/d/VvPV2N7LzjIToA?qq=1',
 'Бот-переводчик для телеграмма. Переводит любой текст. (напиши индекс бота - #3343)': 'https://yadi.sk/d/VvPV2N7LzjIToA?qq=1'}
 
 vk_bots = {'PSP - бот. Бот дает информацию об играх по разным жанрам и направлениям для psp (напиши индекс бота #3350)': 'https://yadi.sk/d/V5OnW90HyZpxAw?qq=1'}
 
+discord_bots = {'Бот сообщества. Бот имеет большое количество полезных функций, нужных для сообществ дискорда': 'https://yadi.sk/d/h6ZWwL7u2iqONg?qq=1', 'Ролеватор. Бот способен давать роли участникам, находящихся в сообществе. Каждый может получить роль, которую захочет': 'https://yadi.sk/d/REU1OU3ImT04Vw?qq=1'}
 
 insta_bots = {"У нас нет пока что ботов для инстаграм, но в скором времени появятся, но вы можете заказать у нас желаемого бота": ''}
 
@@ -36,7 +37,7 @@ def check(text_mes):
 def get_text_messages(message):
 
 	if 'привет' in message.text.lower():
-		bot.send_message(message.from_user.id, 'Привет, я бот для сайта botworld.ru. Я помогу тебе скачать любого бота для разных соц. сетей. Напиши мне одно из названий: telegram, vk, instagram, discord. Ты должен быть зарегистрирован на нашем сайте botworld.ru, если ты не зарегистрирован, сделай это, займет меньше минуты! Напиши мне свою почту, чтобы я убедился, что ты уже зарегестрирован!')
+		bot.send_message(message.from_user.id, 'Привет, я бот для сайта botworld.ru. Я помогу тебе скачать любого бота для разных соц. сетей. Ты должен быть зарегистрирован на нашем сайте botworld.ru, если ты не зарегистрирован, сделай это, займет меньше минуты! Напиши мне свою почту, чтобы я убедился, что ты уже зарегестрирован!')
 	elif '@' in message.text.lower():
 		if check(message.text.lower()) == True:
 			bot.send_message(message.from_user.id, 'Добро пожаловать')
@@ -87,7 +88,6 @@ def get_text_messages(message):
 	elif '#3360' in message.text.lower():
 		for key, val in discord_bots.items():
 			if '3360' in key:
-				print(22)
 				bot.send_message(message.from_user.id, text=val)
 
 	elif '#3361' in message.text.lower():
@@ -95,13 +95,14 @@ def get_text_messages(message):
 			if '3361' in key:
 				bot.send_message(message.from_user.id, text=val)
 
+	elif message.text.lower() == '#000':
+		bot.send_message(message.from_user.id, 'Напишите #000, фамилию, имя, почту и требования к боту.')
+
 	elif '#000' in message.text.lower():
 		f = open('orders.txt', 'a')
 		f.write(message.text)
 		f.write('\n')
-		bot.send_message(message.from_user.id, "Ваша заявка успешно отправлена, ждите, в ближайшее время с вами свяжутся наши программисты")
-	elif message.text.lower() == '#000':
-		bot.send_message(message.from_user.id, 'Напишите #000, фамилию, имя, почту и требования к')
+		bot.send_message(message.from_user.id, "Ваша заявка успешно отправлена, ждите, в ближайшее время мы с вами свяжемся!")
 	else:
 		bot.send_message(message.from_user.id, "Я тебя не понимаю. Напиши Привет.")
 
