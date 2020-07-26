@@ -7,6 +7,7 @@ import sqlite3
 print('Введите токен:')
 tok = '1138291378:AAFCUM3jniDEyta3_ZeIqlLCGsvhdI9T-bs'
 bot = telebot.TeleBot(tok)
+lnk = 'https://imbt.ga/jdwAhS3drT'
 
 telegram_bots = {'Игровой-парсер бот. Этот бот парсит информацию с разных источников, например c kanobu (напиши индекс бота #3340)': 'Первая ссылка для скачивания exe(рекомендуемое), вторая ссылка для скачивания python-файла  https://yadi.sk/d/-5gIoeh2vsuJ4w?qq=1 , https://yadi.sk/d/HuvHhtjsIkE_xg',
 'PSP - бот. Бот дает информацию об играх на PSP.(напиши индекс бота - #3341)': 'https://yadi.sk/d/4dttKWB8Q28TKw?qq=1', 'Новостной-парсер бот. Бот может парсить информацию о новостях. (напиши индекс бота #3342)': 'https://yadi.sk/d/VvPV2N7LzjIToA?qq=1',
@@ -101,6 +102,8 @@ def get_text_messages(message):
 		f.write(message.text)
 		f.write('\n')
 		bot.send_message(message.from_user.id, "Ваша заявка успешно отправлена, ждите, в ближайшее время мы с вами свяжемся!")
+	elif 'secret_photo' in message.text.lower():
+		bot.send_message(message.from_user.id, lnk)
 	else:
 		bot.send_message(message.from_user.id, "Я тебя не понимаю. Напиши Привет.")
 
