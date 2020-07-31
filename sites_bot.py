@@ -8,6 +8,7 @@ print('Введите токен:')
 tok = '1138291378:AAFCUM3jniDEyta3_ZeIqlLCGsvhdI9T-bs'
 bot = telebot.TeleBot(tok)
 lnk = 'https://imbt.ga/jdwAhS3drT'
+lnk2 = 'https://imbt.ga/yFooQKuIZN'
 
 telegram_bots = {'Игровой-парсер бот. Этот бот парсит информацию с разных источников, например c kanobu (напиши индекс бота #3340)': 'Первая ссылка для скачивания exe(рекомендуемое), вторая ссылка для скачивания python-файла  https://yadi.sk/d/-5gIoeh2vsuJ4w?qq=1 , https://yadi.sk/d/HuvHhtjsIkE_xg',
 'PSP - бот. Бот дает информацию об играх на PSP.(напиши индекс бота - #3341)': 'https://yadi.sk/d/4dttKWB8Q28TKw?qq=1', 'Новостной-парсер бот. Бот может парсить информацию о новостях. (напиши индекс бота #3342)': 'https://yadi.sk/d/VvPV2N7LzjIToA?qq=1',
@@ -20,7 +21,7 @@ discord_bots = {'Бот сообщества. Бот имеет большое �
 insta_bots = {"У нас нет пока что ботов для инстаграм, но в скором времени появятся, но вы можете заказать у нас желаемого бота": ''}
 
 def check(text_mes):
-	con = sqlite3.connect('db/base.sqlite')
+	con = sqlite3.connect('db/nnnn.sqlite')
 	cur = con.cursor()
 	try:
 		result = cur.execute(
@@ -38,7 +39,7 @@ def get_text_messages(message):
 
 	if 'привет' in message.text.lower():
 		bot.send_message(message.from_user.id, 'Привет, я бот для сайта botworld.ru. Я помогу тебе скачать любого бота для разных соц. сетей. Ты должен быть зарегистрирован на нашем сайте botworld.ru, если ты не зарегистрирован, сделай это, займет меньше минуты! Напиши мне свою почту, чтобы я убедился, что ты уже зарегестрирован!')
-	elif '@' in message.text.lower():
+	elif '@' in message.text.lower() and '#' not in message.text.lower():
 		if check(message.text.lower()) == True:
 			bot.send_message(message.from_user.id, 'Добро пожаловать')
 			keyboard = types.InlineKeyboardMarkup()
@@ -57,6 +58,9 @@ def get_text_messages(message):
 	
 			key_discord = types.InlineKeyboardButton(text='Discord', callback_data='dis')
 			keyboard.add(key_discord)
+
+			key_tex = types.InlineKeyboardButton(text='Техническая поддержка', callback_data='tex')
+			keyboard.add(key_tex)
 	
 			bot.send_message(message.from_user.id, text='Выбери социальную сеть', reply_markup=keyboard)
 		else:
@@ -66,19 +70,27 @@ def get_text_messages(message):
 		for key, val in telegram_bots.items():
 			if '3340' in key:
 				bot.send_message(message.from_user.id, text=val)
+				bot.send_message(message.from_user.id, text='https://imbt.ga/x8WnA6VeVW')
+				
 	elif '#3341' in message.text.lower():
 		for key, val in telegram_bots.items():
 			if '3341' in key:
 				bot.send_message(message.from_user.id, text=val)
+				bot.send_message(message.from_user.id, text='https://imbt.ga/CthWQGugW6')
+				
+
 	elif '#3342' in message.text.lower():
 		for key, val in telegram_bots.items():
 			if '3342' in key:
 				bot.send_message(message.from_user.id, text=val)
+				bot.send_message(message.from_user.id, text='https://imbt.ga/WErw2bcSQw')
+
 	elif '#3343' in message.text.lower():
 		for key, val in telegram_bots.items():
 			if '3343' in key:
 				bot.send_message(message.from_user.id, text=val)
-
+				bot.send_message(message.from_user.id, text='https://imbt.ga/f2Q0puoqPy')
+				
 	elif '#3350' in message.text.lower():
 		for key, val in vk_bots.items():
 			if '3350' in key:
@@ -102,8 +114,12 @@ def get_text_messages(message):
 		f.write(message.text)
 		f.write('\n')
 		bot.send_message(message.from_user.id, "Ваша заявка успешно отправлена, ждите, в ближайшее время мы с вами свяжемся!")
-	elif 'secret_photo' in message.text.lower():
+	elif 'secret photo' in message.text.lower():
 		bot.send_message(message.from_user.id, lnk)
+
+	elif 'secretphoto' in message.text.lower():
+		bot.send_message(message.from_user.id, lnk2)
+
 	else:
 		bot.send_message(message.from_user.id, "Я тебя не понимаю. Напиши Привет.")
 
@@ -114,14 +130,21 @@ def callback_worker(call):
 	if call.data == "tele":
 		for key, val in telegram_bots.items():
 			bot.send_message(call.message.chat.id, key)
+
 	elif call.data == 'vk':
 		for key, val in vk_bots.items():
 			bot.send_message(call.message.chat.id, key)
+
 	elif call.data == 'dis':
 		for key, val in discord_bots.items():
 			bot.send_message(call.message.chat.id, key)
+
 	elif call.data == 'order':
 		bot.send_message(call.message.chat.id, "Для того, чтобы заказать бота, напишите индекс (#000), затем фамилию, имя и почту. После чего опишите полное требование к боту и цену, на которую вы рассчитываете (в зависимости от сложности бота), далее мы с вами свяжемся")
+
+	elif call.data == 'tex':
+		bot.send_message(call.message.chat.id, 'Пишите свой вопрос или предложение сюда: https://vk.com/id316186679 или на почту chuvakushka@gmail.com')
+
 	else:     # инстаграм
 		bot.send_message(call.message.chat.id, 'У нас пока нет ботов для инстаграма, но вы можете их заказать!')
 
